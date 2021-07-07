@@ -2,6 +2,7 @@ package com.l3.moyennecalculateur;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -9,10 +10,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
+    private ModuleDAO moduleDAO = new ModuleDAO(this);
     private EditText txtModuleName, txtModuleCoeff, txtModuleEmd, txtModuleTd, txtModuleTp;
     private Button btnMoyenne, btnMoyenneGenerale;
     private TextView txtMoyenne;
     private double mMoyenne;
+    public static final String MODULE_DB_NAME = "DB_Module";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,15 +27,26 @@ public class MainActivity extends AppCompatActivity {
         txtModuleEmd = findViewById(R.id.activity_main_module_emd_txt);
         txtModuleTd = findViewById(R.id.activity_main_module_td_txt);
         txtModuleTp = findViewById(R.id.activity_main_module_tp_txt);
-        btnMoyenne = findViewById(R.id.activity_main_moyenne_btn);
         txtMoyenne = findViewById(R.id.activity_main_moyenne_txt);
+        btnMoyenne = findViewById(R.id.activity_main_moyenne_btn);
         btnMoyenneGenerale = findViewById(R.id.activity_main_moyenne_generale_btn);
+
         btnMoyenne.setOnClickListener(v -> {
             if (inputIsOk()){
-                mMoyenne = toDouble(txtModuleEmd)*2 + (toDouble(txtModuleTd) + toDouble(txtModuleTp))/2;
-                mMoyenne /= 3;
-                txtMoyenne.setText(String.valueOf(mMoyenne));
+                Module module = new Module(txtModuleName.getText().toString(),
+                        toInteger(txtModuleCoeff),
+                        toDouble(txtModuleEmd),
+                        toDouble(txtModuleTd),
+                        toDouble(txtModuleTp));
+                txtMoyenne.setText(String.valueOf(module.getMoyenne()));
+                moduleDAO.addModule(module);
             }
+        });
+
+        btnMoyenneGenerale.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, MoyenneGenerale.class);
+            //startActivity(intent);
+            showToast(moduleDAO.selectModule());
         });
     }
 
@@ -72,9 +86,26 @@ public class MainActivity extends AppCompatActivity {
         return -1;
     }
 
+    private int toInteger(EditText txtEditText) {
+        if(canBeInteger(txtEditText)) {
+            return Integer.parseInt(txtEditText.getText().toString());
+        }
+        return -1;
+    }
+
     private boolean canBeDouble(EditText txtEditText) {
         try {
             double d = Double.parseDouble(txtEditText.getText().toString());
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private boolean canBeInteger(EditText txtEditText) {
+        try {
+            int i = Integer.parseInt(txtEditText.getText().toString());
             return true;
         } catch (Exception e) {
             e.printStackTrace();
