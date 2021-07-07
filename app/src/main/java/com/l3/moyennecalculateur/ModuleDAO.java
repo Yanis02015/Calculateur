@@ -38,14 +38,34 @@ public class ModuleDAO extends DAOBase{
         this.open();
         mDb.insert(ModuleDAO.TABLE_NAME, null, contentValues);
         this.close();
+        System.out.println("Donnée ajouté à la database");
     }
 
-    public String selectModule() {
+    public String[] selectModule() {
         this.open();
         Cursor cursor = mDb.rawQuery("SELECT " + INTITULE + " FROM " + TABLE_NAME, new String[]{});
-        cursor.moveToFirst();
-        String string = cursor.getString(0);
+        String[] header = new String[cursor.getCount()];
+        int i=0;
+        while (cursor.moveToNext()) {
+            String intitule = cursor.getString(0);/*
+            String emd = cursor.getString(1);
+            String td = cursor.getString(2);
+            String tp = cursor.getString(3);
+            String moyenne = cursor.getString(4);*/
+            header[i] = intitule;
+            i++;
+        }
         cursor.close();
-        return string;
+        this.close();
+        return header;
+    }
+
+    public int getLength() {
+        this.open();
+        Cursor cursor = mDb.rawQuery("SELECT " + INTITULE + " FROM " + TABLE_NAME, new String[]{});
+        int length = cursor.getCount();
+        cursor.close();
+        this.close();
+        return length;
     }
 }

@@ -31,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
         btnMoyenne = findViewById(R.id.activity_main_moyenne_btn);
         btnMoyenneGenerale = findViewById(R.id.activity_main_moyenne_generale_btn);
 
+        btnMoyenneGeneraleEnable();
+
         btnMoyenne.setOnClickListener(v -> {
             if (inputIsOk()){
                 Module module = new Module(txtModuleName.getText().toString(),
@@ -40,14 +42,19 @@ public class MainActivity extends AppCompatActivity {
                         toDouble(txtModuleTp));
                 txtMoyenne.setText(String.valueOf(module.getMoyenne()));
                 moduleDAO.addModule(module);
+                btnMoyenneGeneraleEnable();
+                showToast(String.valueOf(moduleDAO.getLength()));
             }
         });
 
         btnMoyenneGenerale.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, MoyenneGenerale.class);
-            //startActivity(intent);
-            showToast(moduleDAO.selectModule());
+            startActivity(intent);
         });
+    }
+
+    private void btnMoyenneGeneraleEnable() {
+        btnMoyenneGenerale.setEnabled(moduleDAO.getLength() > 0);
     }
 
     private boolean inputIsOk() {
