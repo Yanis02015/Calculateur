@@ -9,13 +9,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
+
 public class MainActivity extends AppCompatActivity {
     private ModuleDAO moduleDAO = new ModuleDAO(this);
     private EditText txtModuleName, txtModuleCoeff, txtModuleEmd, txtModuleTd, txtModuleTp;
     private Button btnMoyenne, btnMoyenneGenerale;
     private TextView txtMoyenne;
     private double mMoyenne;
-    public static final String MODULE_DB_NAME = "DB_Module";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +41,14 @@ public class MainActivity extends AppCompatActivity {
                         toDouble(txtModuleEmd),
                         toDouble(txtModuleTd),
                         toDouble(txtModuleTp));
-                txtMoyenne.setText(String.valueOf(module.getMoyenne()));
+                int sizeOfTable = moduleDAO.getLength();
+                txtMoyenne.setText(formatDouble(module.getMoyenne()));
                 moduleDAO.addModule(module);
                 btnMoyenneGeneraleEnable();
-                showToast(String.valueOf(moduleDAO.getLength()));
+                if(sizeOfTable < moduleDAO.getLength())
+                    showToast("Module N°" + moduleDAO.getLength() + " ajouté avec succée.");
+                else
+                    showToast("Problème inatendu, module non ajouté.");
             }
         });
 
@@ -118,6 +123,11 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
             return false;
         }
+    }
+
+    private String formatDouble(double number) {
+        DecimalFormat df = new DecimalFormat("00.00");
+        return df.format(number);
     }
 
     public double getMoyenne(double emd, double td, double tp){

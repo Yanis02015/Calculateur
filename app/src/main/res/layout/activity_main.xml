@@ -17,6 +17,7 @@
         android:textAlignment="center"
         android:layout_margin="10dp"
         android:layout_marginBottom="40dp"
+        android:textColor="@color/dark_700"
         android:text="Saisissez les information du module"/>
 
     <LinearLayout
@@ -149,7 +150,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Calculer sa moyenne"/>
+        android:text="Calculer la moyenne du module"/>
 
     <Space
         android:layout_width="wrap_content"

@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
+import java.util.ArrayList;
+
 public class ModuleDAO extends DAOBase{
     public static final String TABLE_NAME = "module";
     public static final String KEY = "id";
@@ -12,6 +14,7 @@ public class ModuleDAO extends DAOBase{
     public static final String EMD = "emd";
     public static final String TD = "td";
     public static final String TP = "tp";
+    public static final String MOYENNE = "moyenne";
 
     public static final String TABLE_CREATE =
             "CREATE TABLE" + TABLE_NAME + " (" +
@@ -35,29 +38,26 @@ public class ModuleDAO extends DAOBase{
         contentValues.put(EMD, module.getEmd());
         contentValues.put(TD, module.getTd());
         contentValues.put(TP, module.getTp());
+        contentValues.put(MOYENNE, module.getMoyenne());
         this.open();
         mDb.insert(ModuleDAO.TABLE_NAME, null, contentValues);
         this.close();
         System.out.println("Donnée ajouté à la database");
     }
 
-    public String[] selectModule() {
+    public ArrayList<MarksView> getAllModule() {
         this.open();
-        Cursor cursor = mDb.rawQuery("SELECT " + INTITULE + " FROM " + TABLE_NAME, new String[]{});
-        String[] header = new String[cursor.getCount()];
-        int i=0;
+        Cursor cursor = mDb.rawQuery("SELECT " + INTITULE + ", " + COEFFICIENT + ", " + MOYENNE + " FROM " + TABLE_NAME, new String[]{});
+        ArrayList<MarksView> output = new ArrayList<>();
         while (cursor.moveToNext()) {
-            String intitule = cursor.getString(0);/*
-            String emd = cursor.getString(1);
-            String td = cursor.getString(2);
-            String tp = cursor.getString(3);
-            String moyenne = cursor.getString(4);*/
-            header[i] = intitule;
-            i++;
+            String intitule = cursor.getString(0);
+            String coefficient = cursor.getString(1);
+            String moyenne = cursor.getString(2);
+            output.add(new MarksView(intitule, Integer.parseInt(coefficient), Double.parseDouble(moyenne)));
         }
         cursor.close();
         this.close();
-        return header;
+        return output;
     }
 
     public int getLength() {
