@@ -13,7 +13,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public static final String MODULE_TD = "td";
     public static final String MODULE_TP = "tp";
     public static final String MODULE_MOYENNE = "moyenne";
-    public static final String MODULE_TABLE_NAME = "Module";
+    public static final String MODULE_TABLE_NAME = "module";
 
     public static final String MODULE_TABLE_CREATE =
             "CREATE TABLE " + MODULE_TABLE_NAME + " (" +

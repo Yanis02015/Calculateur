@@ -1,13 +1,22 @@
 package com.l3.moyennecalculateur;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 
 import java.text.DecimalFormat;
 
@@ -18,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView txtMoyenne;
     private double mMoyenne;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         btnMoyenneGenerale = findViewById(R.id.activity_main_moyenne_generale_btn);
 
         btnMoyenneGeneraleEnable();
+        this.configureToolbar();
 
         btnMoyenne.setOnClickListener(v -> {
             if (inputIsOk()){
@@ -45,11 +56,14 @@ public class MainActivity extends AppCompatActivity {
                 txtMoyenne.setText(formatDouble(module.getMoyenne()));
                 moduleDAO.addModule(module);
                 btnMoyenneGeneraleEnable();
-                if(sizeOfTable < moduleDAO.getLength())
+                if(sizeOfTable < moduleDAO.getLength()) {
                     showToast("Module N°" + moduleDAO.getLength() + " ajouté avec succée.");
+                    txtModuleName.setText("");
+                }
                 else
                     showToast("Problème inatendu, module non ajouté.");
-            }
+            } else
+                txtMoyenne.setText("");
         });
 
         btnMoyenneGenerale.setOnClickListener(v -> {
@@ -57,6 +71,69 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_activity_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_activity_main_text_clear:
+                this.clearInput();
+                return true;
+            case R.id.menu_activity_main_delete:
+                showAlertDialogForClearDb(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void showAlertDialogForClearDb(Context context) {
+        int nbModule = moduleDAO.getLength();
+        if(nbModule != 0) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setCancelable(true);
+            builder.setTitle("Message de confirmation");
+            builder.setMessage("Êtes vous sûr de vouloir supprimer les " +
+                    nbModule +
+                    " modules déjà enrgistrés ?");
+
+            builder.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    moduleDAO.clearDb();
+                    showToast(nbModule + " module supprimé avec succée");
+                    btnMoyenneGeneraleEnable();
+                    clearInput();
+                }
+            });
+
+            builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    showToast("Opération annulé");
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        } else
+            showToast("Aucun module à supprimer, la DB est vide.");
+    }
+
+    private void clearInput() {
+        txtModuleName.setText("");
+        txtModuleCoeff.setText("");
+        txtModuleEmd.setText("");
+        txtModuleTd.setText("");
+        txtModuleTp.setText("");
+        txtMoyenne.setText(".....");
+        this.showToast("Champs de saisi vidé avec sucée!");
+    }
+
 
     private void btnMoyenneGeneraleEnable() {
         btnMoyenneGenerale.setEnabled(moduleDAO.getLength() > 0);
@@ -68,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
                 !txtModuleEmd.getText().toString().isEmpty() &&
                 !txtModuleTd.getText().toString().isEmpty() &&
                 !txtModuleTp.getText().toString().isEmpty()){
-            if(toDouble(txtModuleCoeff)>0){
+            if(toDouble(txtModuleCoeff)>0 && toDouble(txtModuleCoeff) <= 20){
                 if(toDouble(txtModuleEmd)>=0 && toDouble(txtModuleEmd)<=20){
                     if(toDouble(txtModuleTd)>=0 && toDouble(txtModuleTd)<=20){
                         if(toDouble(txtModuleTp)>=0 && toDouble(txtModuleTp)<=20){
@@ -80,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
                 } else
                     showToast("L'EMD ne peut pas être négatif ou supperieur à 20");
             } else
-                showToast("Le coefficient ne peut pas être négatif");
+                showToast("Le coefficient ne peut pas être négatif ou supperieur à 20");
         } else
             showToast("Tous les champs doivent être saisis");
 
@@ -128,6 +205,12 @@ public class MainActivity extends AppCompatActivity {
     private String formatDouble(double number) {
         DecimalFormat df = new DecimalFormat("00.00");
         return df.format(number);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void configureToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
     }
 
     public double getMoyenne(double emd, double td, double tp){

@@ -9,7 +9,7 @@
         android:id="@+id/item_intitule"
         android:layout_width="180dp"
         android:layout_height="wrap_content"
-        android:textSize="25sp"
+        android:textSize="18sp"
         android:textColor="@color/dark_700"
         android:textStyle="bold"
         android:text="Intitule"/>
@@ -23,7 +23,7 @@
         android:id="@+id/item_coefficient"
         android:layout_width="30dp"
         android:layout_height="wrap_content"
-        android:textSize="25sp"
+        android:textSize="18sp"
         android:textColor="@color/dark_700"
         android:text="12"/>
     <Space
@@ -35,7 +35,7 @@
         android:id="@+id/item_moyenne"
         android:layout_width="70dp"
         android:layout_height="wrap_content"
-        android:textSize="25sp"
+        android:textSize="18sp"
         android:textColor="@color/dark_700"
         android:text="88.45"/>
 </LinearLayout>

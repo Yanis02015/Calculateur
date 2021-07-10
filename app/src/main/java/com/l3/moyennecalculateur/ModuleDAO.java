@@ -16,17 +16,6 @@ public class ModuleDAO extends DAOBase{
     public static final String TP = "tp";
     public static final String MOYENNE = "moyenne";
 
-    public static final String TABLE_CREATE =
-            "CREATE TABLE" + TABLE_NAME + " (" +
-                    KEY + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    INTITULE + " TEXT, " +
-                    COEFFICIENT + " INT, " +
-                    EMD + " REAL, " +
-                    TD + " REAL, " +
-                    TP + " REAL);";
-
-    public static final String TABLE_DROP = "DROP TABLE IF EXISTS " + TABLE_NAME + ";";
-
     public ModuleDAO(Context pContext) {
         super(pContext);
     }
@@ -67,5 +56,12 @@ public class ModuleDAO extends DAOBase{
         cursor.close();
         this.close();
         return length;
+    }
+
+    public void clearDb() {
+        this.open();
+        mDb.execSQL(DatabaseHandler.MODULE_TABLE_DROP);
+        mDb.execSQL(DatabaseHandler.MODULE_TABLE_CREATE);
+        this.close();
     }
 }
