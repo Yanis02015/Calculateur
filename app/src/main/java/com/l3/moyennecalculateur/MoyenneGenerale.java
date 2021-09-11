@@ -31,6 +31,7 @@ public class MoyenneGenerale extends AppCompatActivity {
     public static final String SILVER = "Tu devrai commencer à paniquer être dans le juste milieu est stressant.";
     public static final String BRONZE = "Amaken c'est le moment akekssegh Netflix. Concentres toi chwiya gh leqrayaaa aww!";
     public static final String IRON = "aken idenan imenzoya, rattrapage yergazen !";
+    public static final String NO_REMARQUE = "Vuillez saisir vos notes afin qu'on puisse calculer votre moyenne !";
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -89,6 +90,7 @@ public class MoyenneGenerale extends AppCompatActivity {
 
             builder.setPositiveButton("Oui", (dialog, which) -> {
                 moduleDAO.clearDb();
+                configureOutput();
                 Toast.makeText(context, nbModule + " module supprimé avec succée", Toast.LENGTH_SHORT).show();
             });
 
@@ -113,8 +115,10 @@ public class MoyenneGenerale extends AppCompatActivity {
             remarqueView.setText(SILVER);
         else if (moyenneGeneraleDouble > 8)
             remarqueView.setText(BRONZE);
-        else
+        else if (moyenneGeneraleDouble > 0)
             remarqueView.setText(IRON);
+        else
+            remarqueView.setText(NO_REMARQUE);
     }
 
     private double calculerMoyenne(ArrayList<MarksView> moduleList) {
@@ -139,6 +143,7 @@ public class MoyenneGenerale extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
+        // Retour arriere
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
