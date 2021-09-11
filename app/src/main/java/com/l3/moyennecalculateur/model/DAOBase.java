@@ -1,4 +1,4 @@
-package com.l3.moyennecalculateur;
+package com.l3.moyennecalculateur.model;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

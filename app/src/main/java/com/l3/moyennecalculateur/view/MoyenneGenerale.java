@@ -1,4 +1,4 @@
-package com.l3.moyennecalculateur;
+package com.l3.moyennecalculateur.view;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
@@ -8,7 +8,6 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
@@ -16,6 +15,11 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.l3.moyennecalculateur.control.MarksView;
+import com.l3.moyennecalculateur.control.MarksViewAdaptater;
+import com.l3.moyennecalculateur.R;
+import com.l3.moyennecalculateur.model.ModuleDAO;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;

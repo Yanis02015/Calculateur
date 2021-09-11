@@ -1,6 +1,5 @@
-package com.l3.moyennecalculateur;
+package com.l3.moyennecalculateur.view;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +16,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
+
+import com.l3.moyennecalculateur.control.Module;
+import com.l3.moyennecalculateur.R;
+import com.l3.moyennecalculateur.model.ModuleDAO;
 
 import java.text.DecimalFormat;
 

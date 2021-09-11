@@ -1,4 +1,4 @@
-package com.l3.moyennecalculateur;
+package com.l3.moyennecalculateur.control;
 
 public class MarksView {
     private String intitule;

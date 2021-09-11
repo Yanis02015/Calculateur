@@ -1,8 +1,11 @@
-package com.l3.moyennecalculateur;
+package com.l3.moyennecalculateur.model;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+
+import com.l3.moyennecalculateur.control.MarksView;
+import com.l3.moyennecalculateur.control.Module;
 
 import java.util.ArrayList;
 

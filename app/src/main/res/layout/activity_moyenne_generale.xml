@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MoyenneGenerale">
+    tools:context=".view.MoyenneGenerale">
 
     <include
         layout="@layout/toolbar"
